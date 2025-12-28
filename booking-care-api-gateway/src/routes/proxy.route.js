@@ -1,56 +1,33 @@
+const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
-const auth = require('../middlewares/auth.middleware');
+
+const router = express.Router();
 
 /**
- * Định nghĩa routing từ Gateway → các service
+ * AUTH SERVICE
+ * Client gọi:    /auth/login
+ * Gateway forward: http://localhost:4000/auth/login
  */
-module.exports = (app) => {
+router.use(
+  '/auth',
+  createProxyMiddleware({
+    target: 'http://localhost:4000',
+    changeOrigin: true,
 
-  /**
-   * USER SERVICE
-   * /api/users → http://localhost:4000
-   */
-  app.use(
-    '/api/users',
-    auth, // kiểm tra login
-    createProxyMiddleware({
-      target: process.env.USER_SERVICE_URL,
-      changeOrigin: true,
-      pathRewrite: {
-        '^/api/users': '/users' // đổi path
-      }
-    })
-  );
+    // 🔥 CỰC KỲ QUAN TRỌNG – tránh /auth/auth/login
+    pathRewrite: {
+      '^/auth': '',
+    },
 
-  /**
-   * BOOKING SERVICE
-   * /api/bookings → http://localhost:5000
-   */
-  app.use(
-    '/api/bookings',
-    auth,
-    createProxyMiddleware({
-      target: process.env.BOOKING_SERVICE_URL,
-      changeOrigin: true,
-      pathRewrite: {
-        '^/api/bookings': '/bookings'
-      }
-    })
-  );
+    onProxyReq(proxyReq) {
+      proxyReq.setHeader('x-from-gateway', 'true');
+    },
 
-  /**
-   * DOCTOR SERVICE
-   * /api/doctors → http://localhost:6000
-   */
-  app.use(
-    '/api/doctors',
-    auth,
-    createProxyMiddleware({
-      target: process.env.DOCTOR_SERVICE_URL,
-      changeOrigin: true,
-      pathRewrite: {
-        '^/api/doctors': '/doctors'
-      }
-    })
-  );
-};
+    onError(err, req, res) {
+      console.error('AUTH PROXY ERROR:', err.message);
+      res.status(500).json({ message: 'Auth service unavailable' });
+    },
+  })
+);
+
+module.exports = router;

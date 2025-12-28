@@ -6,11 +6,23 @@ const auth = require('../middlewares/auth.middleware');
 const permission = require('../middlewares/permission.middleware');
 
 /**
- * Gán permission cho role
- * CỰC KỲ NGUY HIỂM nếu không chặn
+ * GET /roles/:roleId/permissions
+ * Lấy danh sách permission của role
  */
-router.post(
-  '/roles/:id/permissions',
+router.get(
+  '/roles/:roleId/permissions',
+  auth,
+  permission('PERMISSION_VIEW'),
+  permissionController.getPermissionsByRole
+);
+
+/**
+ * PUT /roles/:roleId/permissions
+ * Gán lại danh sách permission cho role
+ * ⚠️ CỰC KỲ NGUY HIỂM nếu không chặn quyền
+ */
+router.put(
+  '/roles/:roleId/permissions',
   auth,
   permission('PERMISSION_ASSIGN'),
   permissionController.assignPermissions

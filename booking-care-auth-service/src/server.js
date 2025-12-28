@@ -3,31 +3,42 @@ const express = require('express');
 const cors = require('cors');
 const sequelize = require('./models');
 
-// Import routes
 const authRoutes = require('./routes/auth.route');
 const userRoutes = require('./routes/user.route');
 const roleRoutes = require('./routes/role.route');
 const permissionRoutes = require('./routes/permission.route');
 const gatewayMiddleware = require('./middlewares/gateway.middleware');
+const initAdmin = require('./seed/init-admin');
 
 const app = express();
 
-// Middleware toàn cục
+/* ===== GLOBAL MIDDLEWARE ===== */
 app.use(cors());
 app.use(express.json());
 
+/* ===== GATEWAY MIDDLEWARE ===== */
+app.use(gatewayMiddleware);
 
-// Routes
+/* ===== ROUTES ===== */
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/roles', roleRoutes);
 app.use('/permissions', permissionRoutes);
-app.use(gatewayMiddleware);
 
-// Kiểm tra DB rồi mới start server
-sequelize.authenticate().then(() => {
-  console.log('User DB connected');
-  app.listen(process.env.PORT, () => {
-    console.log(`User Service running on ${process.env.PORT}`);
-  });
-});
+/* ===== START SERVER AFTER DB READY ===== */
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log(' Auth DB connected');
+
+    //   CHỈ CHẠY SEED SAU KHI DB READY
+    await initAdmin();
+
+    app.listen(process.env.PORT, () => {
+      console.log(` Auth Service running on port ${process.env.PORT}`);
+    });
+  } catch (err) {
+    console.error(' Cannot start server:', err);
+    process.exit(1);
+  }
+})();

@@ -1,0 +1,141 @@
+/* ===== RESET NHẸ CHO HOME ===== */
+.home {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+/* ===== HEADER ===== */
+.home-header {
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.home-header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.home-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+  color: #2563eb;
+  font-size: 20px;
+}
+
+.home-nav button {
+  margin-right: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #475569;
+}
+
+.home-nav button:hover {
+  color: #2563eb;
+}
+
+/* ===== HERO ===== */
+.home-hero {
+  background: linear-gradient(90deg, #1d4ed8, #3b82f6);
+  color: white;
+  padding: 48px 16px;
+  text-align: center;
+}
+
+.home-search {
+  margin-top: 24px;
+}
+
+.home-search input {
+  width: 100%;
+  max-width: 500px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+}
+
+/* ===== MAIN ===== */
+.home-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 16px;
+}
+
+/* ===== SECTION ===== */
+.home-section {
+  margin-bottom: 64px;
+}
+
+.home-section h2 {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.home-nodata {
+  color: #64748b;
+  font-style: italic;
+}
+
+/* ===== GRID ===== */
+.home-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.home-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* ===== CARD ===== */
+.home-card {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.home-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.home-button {
+  margin-top: 12px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.home-button:hover {
+  background: #1d4ed8;
+}
+
+/* ===== FOOTER ===== */
+.home-footer {
+  background: #0f172a;
+  color: #cbd5f5;
+  text-align: center;
+  padding: 24px;
+  font-size: 14px;
+}

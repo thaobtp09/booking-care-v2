@@ -4,15 +4,21 @@ const cors = require('cors');
 const proxyRoutes = require('./routes/proxy.route');
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-// Cho phép UI gọi Gateway
 app.use(cors());
 app.use(express.json());
 
-// Gắn proxy routes
-proxyRoutes(app);
+// ✅ log mọi request đi qua gateway
+app.use((req, res, next) => {
+  console.log('[GATEWAY]', req.method, req.originalUrl);
+  next();
+});
 
-// Start API Gateway
-app.listen(process.env.PORT, () => {
-  console.log(`API Gateway running on port ${process.env.PORT}`);
+// ✅ gắn proxy routes
+app.use(proxyRoutes);
+
+// ✅ start server (LUÔN đặt cuối)
+app.listen(PORT, () => {
+  console.log(`🚀 API Gateway running on port ${PORT}`);
 });
