@@ -8,13 +8,10 @@ exports.getPermissionsByRole = async (req, res) => {
   try {
     const { roleId } = req.params;
 
-    const permissionIds =
-      await permissionService.getPermissionIdsByRole(roleId);
+    const permissions =
+      await permissionService.getPermissionsByRole(roleId);
 
-    res.json({
-      roleId: Number(roleId),
-      permissionIds,
-    });
+    res.json(permissions); // [{id, name}]
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

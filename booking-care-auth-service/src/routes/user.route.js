@@ -5,6 +5,19 @@ const userController = require('../controllers/user.controller');
 const auth = require('../middlewares/auth.middleware');
 const permission = require('../middlewares/permission.middleware');
 
+router.get(
+  '/',
+  auth,
+  permission('USER_VIEW'),
+  userController.getUsers
+);
+
+router.get(
+  '/:id',
+  auth,
+  permission('USER_VIEW'),
+  userController.getUserById
+);
 /**
  * Tạo user
  * Chỉ user có quyền USER_CREATE mới được phép

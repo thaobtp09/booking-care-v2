@@ -1,3 +1,55 @@
+/* ===== ADMIN SWITCH ===== */
+.admin-switch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.admin-switch input {
+  display: none;
+}
+
+/* switch background */
+.switch-slider {
+  position: relative;
+  width: 42px;
+  height: 22px;
+  background: #cbd5e1;
+  border-radius: 999px;
+  transition: background 0.2s;
+}
+
+/* knob */
+.switch-slider::before {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  top: 2px;
+  left: 2px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+/* checked state */
+.admin-switch input:checked + .switch-slider {
+  background: #2563eb;
+}
+
+.admin-switch input:checked + .switch-slider::before {
+  transform: translateX(20px);
+}
+
+.switch-label {
+  font-size: 14px;
+  color: #334155;
+}
+
+
+
 /* ===== RESET NHẸ CHO HOME ===== */
 .home {
   font-family: Arial, Helvetica, sans-serif;

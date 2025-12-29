@@ -1,6 +1,30 @@
 const userService = require('../services/user.service');
 
 /**
+ * GET /users
+ */
+exports.getUsers = async (req, res) => {
+  try {
+    const users = await userService.getUsers();
+    res.json(users);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+/**
+ * GET /users/:id
+ */
+exports.getUserById = async (req, res) => {
+  try {
+    const user = await userService.getUserById(req.params.id);
+    res.json(user);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};
+
+/**
  * POST /users
  */
 exports.createUser = async (req, res) => {

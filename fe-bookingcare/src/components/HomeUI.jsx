@@ -55,16 +55,19 @@ const HomeUI = ({
               </button>
             ) : (
               <label className="admin-switch">
-                <input
-                  type="checkbox"
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      history.push('/admin');
-                    }
-                  }}
-                />
-                <span>Trang quản trị ({user?.role})</span>
-              </label>
+  <input
+    type="checkbox"
+    onChange={(e) => {
+      if (e.target.checked) {
+        history.push('/admin');
+      }
+    }}
+  />
+  <span className="switch-slider"></span>
+  <span className="switch-label">
+    Trang quản trị ({user?.role})
+  </span>
+</label>
             )}
 
             <button className="icon-btn mobile-only">

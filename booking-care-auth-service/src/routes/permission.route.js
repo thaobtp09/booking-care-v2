@@ -19,7 +19,7 @@ router.get(
 /**
  * PUT /roles/:roleId/permissions
  * Gán lại danh sách permission cho role
- * ⚠️ CỰC KỲ NGUY HIỂM nếu không chặn quyền
+ *  CỰC KỲ NGUY HIỂM nếu không chặn quyền
  */
 router.put(
   '/roles/:roleId/permissions',

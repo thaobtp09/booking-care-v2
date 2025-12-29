@@ -1,6 +1,18 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/user.model');
+exports.getUsers = async () => {
+  return User.findAll({
+    attributes: { exclude: ['password_hash'] },
+    include: ['role'],
+  });
+};
 
+exports.getUserById = async (id) => {
+  return User.findByPk(id, {
+    attributes: { exclude: ['password_hash'] },
+    include: ['role'],
+  });
+};
 /**
  * Tạo user mới
  */

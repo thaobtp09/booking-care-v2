@@ -1,6 +1,14 @@
 const Role = require('../models/role.model');
 const User = require('../models/user.model');
+const Permission = require("../models/permission.model");
 
+exports.getRoles = async () => {
+  return Role.findAll();
+};
+
+exports.getRoleById = async (id) => {
+  return Role.findByPk(id);
+};
 /**
  * Tạo role mới
  */

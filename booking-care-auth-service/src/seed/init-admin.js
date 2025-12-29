@@ -9,18 +9,46 @@ async function initAdmin() {
     where: { name: 'ADMIN' },
   });
 
-  //  Permissions
   const permissionNames = [
-    'USER_VIEW',
-    'USER_CREATE',
-    'USER_UPDATE',
-    'USER_DELETE',
-    'ROLE_VIEW',
-    'ROLE_CREATE',
-    'ROLE_UPDATE',
-    'ROLE_DELETE',
-    'PERMISSION_ASSIGN',
-  ];
+  // USER
+  'USER_VIEW',
+  'USER_CREATE',
+  'USER_UPDATE',
+  'USER_DELETE',
+
+  // ROLE & PERMISSION
+  'ROLE_VIEW',
+  'ROLE_CREATE',
+  'ROLE_UPDATE',
+  'ROLE_DELETE',
+  'PERMISSION_VIEW',
+  'PERMISSION_ASSIGN',
+
+  // DOCTOR
+  'DOCTOR_VIEW',
+  'DOCTOR_CREATE',
+  'DOCTOR_UPDATE',
+  'DOCTOR_DELETE',
+
+  // SCHEDULE
+  'SCHEDULE_VIEW',
+  'SCHEDULE_CREATE',
+  'SCHEDULE_UPDATE',
+  'SCHEDULE_DELETE',
+
+  // FACILITY
+  'FACILITY_VIEW',
+  'FACILITY_CREATE',
+  'FACILITY_UPDATE',
+  'FACILITY_DELETE',
+
+  // SPECIALTY
+  'SPECIALTY_VIEW',
+  'SPECIALTY_CREATE',
+  'SPECIALTY_UPDATE',
+  'SPECIALTY_DELETE',
+];
+
 
   const permissions = [];
   for (const name of permissionNames) {
@@ -43,7 +71,7 @@ async function initAdmin() {
     },
   });
 
-  console.log('✅ Init admin success');
+  console.log(' Init admin success');
 }
 
 module.exports = initAdmin;
