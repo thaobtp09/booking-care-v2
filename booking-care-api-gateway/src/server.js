@@ -7,18 +7,17 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(express.json());
+// app.use(express.json());
 
-// ✅ log mọi request đi qua gateway
+//  log mọi request đi qua gateway
 app.use((req, res, next) => {
   console.log('[GATEWAY]', req.method, req.originalUrl);
   next();
 });
 
-// ✅ gắn proxy routes
+//  gắn proxy routes
 app.use(proxyRoutes);
-
-// ✅ start server (LUÔN đặt cuối)
+//  start server (LUÔN đặt cuối)
 app.listen(PORT, () => {
-  console.log(`🚀 API Gateway running on port ${PORT}`);
+  console.log(` API Gateway running on port ${PORT}`);
 });

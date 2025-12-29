@@ -14,7 +14,7 @@ exports.login = async ({ email, password }) => {
       include: Permission // lấy luôn permissions của role
     }
   });
-
+  console.log('user', user)
   if (!user) {
     throw new Error('User not found');
   }
@@ -26,12 +26,12 @@ exports.login = async ({ email, password }) => {
   }
 
   // Lấy danh sách permission
-  const permissions = user.role.permissions.map(p => p.name);
+  const permissions = user?.role?.permissions.map(p => p.name);
 
   // Tạo JWT
   const token = generateToken({
     userId: user.id,
-    role: user.role.name,
+    role: user?.role?.name,
     permissions
   });
 
@@ -39,9 +39,9 @@ exports.login = async ({ email, password }) => {
   return {
     token,
     user: {
-      id: user.id,
-      username: user.username,
-      role: user.role.name,
+      id: user?.id,
+      username: user?.username,
+      role: user?.role?.name,
       permissions
     }
   };

@@ -4,8 +4,7 @@
  */
 module.exports = (req, res, next) => {
   // Gateway sẽ gắn header này
-  const gatewaySecret = req.headers['x-gateway-secret'];
-
+  const gatewaySecret = req.headers['x-from-gateway'];
   // So sánh với secret đã cấu hình
   if (gatewaySecret !== process.env.GATEWAY_SECRET) {
     return res.status(403).json({

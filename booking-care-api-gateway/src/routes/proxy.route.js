@@ -13,21 +13,24 @@ router.use(
   createProxyMiddleware({
     target: 'http://localhost:4000',
     changeOrigin: true,
-
-    // 🔥 CỰC KỲ QUAN TRỌNG – tránh /auth/auth/login
-    pathRewrite: {
-      '^/auth': '',
-    },
-
-    onProxyReq(proxyReq) {
+    pathRewrite: function (path, req) { return `/auth${path}`  },
+    // onProxyReq(proxyReq, req) {
+    //   console.log('[AUTH PROXY]', req.originalUrl);
+    //   proxyReq.setHeader('x-from-gateway', 'true');
+    //   console.log('proxyReq',proxyReq.headers)
+    // },
+    on: {
+      proxyReq: (proxyReq, req) => {
+      console.log('[AUTH PROXY]', req.originalUrl);
       proxyReq.setHeader('x-from-gateway', 'true');
+      }
     },
-
     onError(err, req, res) {
       console.error('AUTH PROXY ERROR:', err.message);
       res.status(500).json({ message: 'Auth service unavailable' });
-    },
+    }
   })
 );
+
 
 module.exports = router;
