@@ -26,13 +26,13 @@ exports.login = async ({ email, password }) => {
   }
 
   // Lấy danh sách permission
-  const permissions = user?.role?.permissions.map(p => p.name);
+  // const permissions = user?.role?.permissions.map(p => p.name);
 
   // Tạo JWT
   const token = generateToken({
     userId: user.id,
     role: user?.role?.name,
-    permissions,
+    // permissions,
     doctor_id: user.doctor_id
   });
 
@@ -43,7 +43,7 @@ exports.login = async ({ email, password }) => {
       id: user?.id,
       username: user?.username,
       role: user?.role?.name,
-      permissions,
+      // permissions,
       doctor_id: user.doctor_id
     }
   };

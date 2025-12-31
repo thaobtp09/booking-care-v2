@@ -28,7 +28,6 @@ router.post(
 router.put(
   '/:id',
   auth,
-  permission('USER_UPDATE'),
   userController.updateUser
 );
 
