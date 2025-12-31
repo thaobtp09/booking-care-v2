@@ -46,7 +46,13 @@ exports.updateUser = async (id, data) => {
   const user = await User.findByPk(id);
   if (!user) throw new Error('User not found');
 
-  //  XỬ LÝ doctor_id
+  // ===== FIX: map roleId -> role_id =====
+  if ('roleId' in data) {
+    data.role_id = data.roleId;
+    delete data.roleId; // ❗ rất quan trọng
+  }
+
+  // XỬ LÝ doctor_id
   if ('doctor_id' in data) {
     const currentDoctorId = user.doctor_id;
     const incomingDoctorId = data.doctor_id;
@@ -57,7 +63,6 @@ exports.updateUser = async (id, data) => {
     ) {
       throw new Error('doctor_id cannot be changed');
     }
-    // cho phép set lần đầu hoặc gửi trùng
   }
 
   // Hash lại password nếu có

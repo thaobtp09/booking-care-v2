@@ -1,4 +1,5 @@
 const amqp = require('amqplib');
+const repo = require('../repositories/doctorScheduleCache.repository');
 
 const EXCHANGE = 'doctor.schedule';
 const ROUTING_KEY = 'schedule.changed';
@@ -11,60 +12,46 @@ const startScheduleConsumer = async () => {
   const channel = await conn.createChannel();
 
   await channel.assertExchange(EXCHANGE, 'topic', { durable: true });
-
   const q = await channel.assertQueue(QUEUE, { durable: true });
-
   await channel.bindQueue(q.queue, EXCHANGE, ROUTING_KEY);
 
   console.log('[BOOKING] RabbitMQ connected');
   console.log('[BOOKING] Listening queue:', q.queue);
-  console.log('[BOOKING] Bind:', EXCHANGE, '->', ROUTING_KEY);
 
   channel.consume(q.queue, async (msg) => {
     if (!msg) return;
 
     try {
-      const content = msg.content.toString();
-      const event = JSON.parse(content);
 
-      console.log('------------------------------');
-      console.log('[BOOKING]  EVENT RECEIVED');
-      console.log(JSON.stringify(event, null, 2));
-      console.log('------------------------------');
-
+      const event = JSON.parse(msg.content.toString());
       const { action, data } = event;
 
-      switch (action) {
-        case 'CREATED':
-          console.log('[BOOKING] ACTION = CREATED');
-          console.log('[BOOKING] Schedule data:', data);
-          // TODO: insert vào bảng local
-          break;
+      console.log('------------------------------');
+      console.log('[BOOKING] EVENT RECEIVED');
 
-        case 'UPDATED':
-          console.log('[BOOKING] ACTION = UPDATED');
-          console.log('[BOOKING] Schedule data:', data);
-          // TODO: update bảng local
-          break;
+  if (action === 'CREATED' || action === 'UPDATED') {
+        await repo.upsert({
+          schedule_id: data.schedule_id,
+          doctor_id: data.doctor_id,
+          schedule_date: data.schedule_date,
+          time_slot_id: data.time_slot_id,
+          status: data.status
+        });
 
-        case 'DELETED':
-          console.log('[BOOKING] ACTION = DELETED');
-          console.log('[BOOKING] Schedule data:', data);
-          // TODO: delete bảng local
-          break;
-
-        default:
-          console.log('[BOOKING] UNKNOWN ACTION:', action);
+        console.log('[BOOKING] Cache UPSERT success:', data.schedule_id);
       }
 
+      if (action === 'DELETED') {
+        await repo.remove(data.schedule_id);
+        console.log('[BOOKING] Cache DELETE success:', data.schedule_id);
+      }
       channel.ack(msg);
     } catch (err) {
-      console.error('[BOOKING] ERROR processing message', err);
-      channel.nack(msg, false, false); // bỏ message lỗi
+      console.error('[BOOKING]  ERROR processing message', err);
+      channel.nack(msg, false, false);
     }
   });
 };
-
 module.exports = {
   startScheduleConsumer
 };

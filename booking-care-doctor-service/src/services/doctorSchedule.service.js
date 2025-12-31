@@ -20,7 +20,11 @@ const getByDoctor = (doctorId, date) => {
  * Build payload for event
  */
 const buildPayload = async (schedule) => {
-  const timeSlot = await timeSlotRepo.findById(schedule.time_slot_id);
+  /*
+   *  FIX:
+   * dùng findById
+   */
+  const timeSlot = await timeSlotRepo.findAll(schedule.time_slot_id);
   if (!timeSlot) throw new Error('TIME_SLOT_NOT_FOUND');
 
   return {
@@ -28,15 +32,12 @@ const buildPayload = async (schedule) => {
     schedule_id: schedule.id,
     schedule_date: schedule.schedule_date,
     time_slot_id: schedule.time_slot_id,
-    start_time: timeSlot.start_time,
-    end_time: timeSlot.end_time,
     status: schedule.status
   };
 };
 
 /**
  * CREATE schedule
- * ❌ NO auth / role / doctor validation
  */
 const create = async (data) => {
   const schedule = await repo.create({
@@ -48,14 +49,12 @@ const create = async (data) => {
 
   try {
     const payload = await buildPayload(schedule);
-
     await publishScheduleChanged({
       action: 'CREATED',
       data: payload
     });
   } catch (err) {
-    // LOG nhưng KHÔNG throw
-    console.error('[WARN] Publish schedule CREATED failed:', err.message);
+    console.error('[WARN] Publish CREATED failed:', err.message);
   }
 
   return schedule;
@@ -63,14 +62,13 @@ const create = async (data) => {
 
 /**
  * UPDATE schedule
- * ❌ NO auth / role / doctor validation
  */
 const update = async (id, data) => {
+  /** 
+   * CHỈ update status (và tối đa date / time_slot nếu muốn)
+   */
   await repo.updateById(id, {
-    doctor_id: data.doctor_id,
-    schedule_date: data.schedule_date,
-    time_slot_id: data.time_slot_id,
-    status: data.status
+    status: data.status 
   });
 
   const updatedSchedule = await repo.findById(id);
@@ -78,17 +76,23 @@ const update = async (id, data) => {
 
   const payload = await buildPayload(updatedSchedule);
 
-  await publishScheduleChanged({
-    action: 'UPDATED',
-    data: payload
-  });
+  /**
+   * Bọc try/catch
+   */
+  try {
+    await publishScheduleChanged({
+      action: 'UPDATED',
+      data: payload
+    });
+  } catch (err) {
+    console.error('[WARN] Publish UPDATED failed:', err.message); 
+  }
 
   return updatedSchedule;
 };
 
 /**
  * DELETE schedule
- * ❌ NO auth / role / doctor validation
  */
 const remove = async (id) => {
   const schedule = await repo.findById(id);

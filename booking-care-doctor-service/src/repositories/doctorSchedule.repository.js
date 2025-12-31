@@ -10,7 +10,7 @@ const findByDoctor = (doctorId) =>
     order: [['schedule_date', 'DESC']]
   });
 
-  const findByDoctorWithCondition = (where) =>
+const findByDoctorWithCondition = (where) =>
   DoctorSchedule.findAll({
     where,
     order: [['schedule_date', 'DESC'], ['time_slot_id', 'ASC']]
@@ -23,15 +23,21 @@ const findExist = (doctor_id, schedule_date, time_slot_id) =>
 
 const create = (data) => DoctorSchedule.create(data);
 
-const updateById = (id, data) =>
-  DoctorSchedule.update(
-    data,
-    {
-      where: { id },
-      fields: ['doctor_id', 'schedule_date', 'time_slot_id', 'status'], 
-      returning: true                                                   
-    }
-  );
+/**
+ * - Check affectedRows
+ * - Nếu = 0 → throw error
+ */
+const updateById = async (id, data) => {
+  const [affected] = await DoctorSchedule.update(data, {
+    where: { id }
+  });
+
+  if (affected === 0) {
+    throw new Error('UPDATE_FAILED_OR_NOT_FOUND'); // ✅ FIX
+  }
+
+  return affected;
+};
 
 const findById = (id) => DoctorSchedule.findByPk(id);
 

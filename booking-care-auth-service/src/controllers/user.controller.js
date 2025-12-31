@@ -41,7 +41,22 @@ exports.createUser = async (req, res) => {
  */
 exports.updateUser = async (req, res) => {
   try {
-    const user = await userService.updateUser(req.params.id, req.body);
+    const allowFields = [
+  'username',
+  'email',
+  'password',
+  'status',
+  'roleId',
+  'doctor_id'
+];
+
+const payload = {};
+for (const key of allowFields) {
+  if (req.body[key] !== undefined) payload[key] = req.body[key];
+}
+
+const user = await userService.updateUser(req.params.id, payload);
+
     res.json(user);
   } catch (err) {
     res.status(400).json({ message: err.message });
