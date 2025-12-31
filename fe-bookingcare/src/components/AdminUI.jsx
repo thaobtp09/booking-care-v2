@@ -1,6 +1,6 @@
 import "./home.css";
 
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
 import {
@@ -16,8 +16,10 @@ import {
  * - Menu hiển thị ĐẦY ĐỦ chức năng admin
  * - Role chỉ dùng để HIỂN THỊ tên & redirect mặc định (xử lý ở Admin.jsx)
  */
+
 const AdminUI = ({ children }) => {
   const history = useHistory();
+  const routerLocation = useLocation(); // ĐỔI TÊN
   const { user, logout } = useAuth();
 
   return (
@@ -43,9 +45,9 @@ const AdminUI = ({ children }) => {
               Role
             </button>
 
-            <button onClick={() => history.push("/admin/permissions")}>
+            {/* <button onClick={() => history.push("/admin/permissions")}>
               Permission
-            </button>
+            </button> */}
 
             <button onClick={() => history.push("/admin/schedule")}>
               Lịch khám
@@ -66,14 +68,33 @@ const AdminUI = ({ children }) => {
 
           {/* ===== ACTIONS ===== */}
           <div className="home-actions">
+
+            {/*  Thông báo */}
             <button className="icon-btn" title="Thông báo">
               <Bell size={20} />
             </button>
 
+            {/*  SWITCH ADMIN */}
+            <label className="admin-switch">
+              <input
+                type="checkbox"
+                checked={routerLocation.pathname.startsWith("/admin")}
+                onChange={(e) => {
+                  history.push(e.target.checked ? "/admin" : "/");
+                }}
+              />
+              <span className="switch-slider"></span>
+              <span className="switch-label">
+                Trang quản trị ({user?.role})
+              </span>
+            </label>
+
+            {/* 👤 USER */}
             <span style={{ margin: "0 12px", fontSize: 14 }}>
               {user?.username} ({user?.role})
             </span>
 
+            {/*  LOGOUT */}
             <button
               className="icon-btn"
               title="Đăng xuất"
@@ -84,6 +105,7 @@ const AdminUI = ({ children }) => {
             >
               <LogOut size={20} />
             </button>
+
           </div>
 
         </div>

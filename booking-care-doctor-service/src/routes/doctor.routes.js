@@ -1,26 +1,11 @@
-const router = require('express').Router();
+const express = require('express');
+const router = express.Router();
 const controller = require('../controllers/doctor.controller');
-const { uploadDoctorAvatar } = require('../config/upload');
 
-/**
- * Doctor routes
- */
-
-router.get('/', controller.getAll);
-router.get('/:id', controller.getById);
-
-router.post(
-  '/',
-  uploadDoctorAvatar.single('avatar'),
-  controller.create
-);
-
-router.put(
-  '/:id',
-  uploadDoctorAvatar.single('avatar'),
-  controller.update
-);
-
-router.delete('/:id', controller.delete);
+router.post('/', controller.createDoctor);
+router.get('/', controller.getDoctors);
+router.get('/:id', controller.getDoctorById);
+router.put('/:id', controller.updateDoctor);
+router.delete('/:id', controller.deleteDoctor);
 
 module.exports = router;

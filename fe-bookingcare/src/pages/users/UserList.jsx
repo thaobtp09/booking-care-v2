@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
   getUsers,
-  deleteUser
+  deleteUser,
+  getRoles
 } from "../../api/userApi";
 import UserForm from "./UserForm";
 
@@ -36,7 +37,7 @@ const UserList = () => {
       alert("Xoá user thất bại");
     }
   };
-
+  console.log('user',users)
   return (
     <div>
       <h2>Quản lý User</h2>
@@ -74,8 +75,8 @@ const UserList = () => {
               <td>{user.id}</td>
               <td>{user.username}</td>
               <td>{user.email}</td>
-              <td>{user.role}</td>
-              <td>{user.createdAt}</td>
+              <td>{user?.role?.name}</td>
+              <td>{user.created_at}</td>
               <td>
                 <button onClick={() => {
                   setEditingUserId(user.id);

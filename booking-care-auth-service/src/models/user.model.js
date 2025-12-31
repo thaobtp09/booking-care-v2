@@ -32,7 +32,15 @@ const User = sequelize.define(
     created_at: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW
+    },
+    role_id: {
+      type: DataTypes.INTEGER,
+    },
+    doctor_id: {
+  type: DataTypes.INTEGER,
+  allowNull: true
     }
+
   },
   {
     timestamps: false

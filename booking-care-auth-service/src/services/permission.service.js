@@ -37,3 +37,6 @@ module.exports = {
   assignPermissionsToRole,
   getPermissionIdsByRole,
 };
+exports.getPermissions = async () => {
+  return Permission.findAll();
+};

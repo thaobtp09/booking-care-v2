@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/user.model');
+
 exports.getUsers = async () => {
   return User.findAll({
     attributes: { exclude: ['password_hash'] },
@@ -13,30 +14,53 @@ exports.getUserById = async (id) => {
     include: ['role'],
   });
 };
+
 /**
- * Tạo user mới
+ * =========================
+ * CREATE USER
+ * =========================
+ * - doctor_id luôn NULL
  */
 exports.createUser = async (data) => {
   const hash = await bcrypt.hash(data.password, 10);
-
+  console.log('data',data)
   return User.create({
     username: data.username,
     email: data.email,
     password_hash: hash,
-    role_id: data.role_id
+    role_id: data?.roleId,
   });
 };
 
 /**
- * Cập nhật user
- * - Cho phép đổi username, email, status, role
- * - Nếu có password thì hash lại
+ * =========================
+ * UPDATE USER
+ * =========================
+ * doctor_id:
+ * - DB NULL → cho set
+ * - DB có giá trị:
+ *    + trùng → OK
+ *    + khác → 400
  */
 exports.updateUser = async (id, data) => {
   const user = await User.findByPk(id);
   if (!user) throw new Error('User not found');
 
-  // Nếu có password mới thì hash
+  //  XỬ LÝ doctor_id
+  if ('doctor_id' in data) {
+    const currentDoctorId = user.doctor_id;
+    const incomingDoctorId = data.doctor_id;
+
+    if (
+      currentDoctorId !== null &&
+      String(currentDoctorId) !== String(incomingDoctorId)
+    ) {
+      throw new Error('doctor_id cannot be changed');
+    }
+    // cho phép set lần đầu hoặc gửi trùng
+  }
+
+  // Hash lại password nếu có
   if (data.password) {
     data.password_hash = await bcrypt.hash(data.password, 10);
     delete data.password;
@@ -47,7 +71,9 @@ exports.updateUser = async (id, data) => {
 };
 
 /**
- * Xoá user
+ * =========================
+ * DELETE USER
+ * =========================
  */
 exports.deleteUser = async (id) => {
   const user = await User.findByPk(id);

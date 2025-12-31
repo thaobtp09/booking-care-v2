@@ -36,3 +36,7 @@ exports.assignPermissions = async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 };
+exports.getPermissions = async (req, res) => {
+  const permissions = await permissionService.getPermissions();
+  res.json(permissions);
+};

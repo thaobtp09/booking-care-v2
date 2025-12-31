@@ -1,38 +1,22 @@
-import axios from "axios";
-
-const API_BASE_URL = process.env.REACT_APP_API_GATEWAY;
+import axiosClient from './axiosClient';
 
 /**
- * Lấy danh sách user
+ * USER API → Gateway
  */
-export const getUsers = () => {
-  return axios.get(`${API_BASE_URL}/users`);
-};
 
-/**
- * Lấy chi tiết user theo id
- */
-export const getUserById = (id) => {
-  return axios.get(`${API_BASE_URL}/users/${id}`);
-};
+export const getUsers = () =>
+  axiosClient.get('/users');
 
-/**
- * Thêm user mới
- */
-export const createUser = (data) => {
-  return axios.post(`${API_BASE_URL}/users`, data);
-};
+export const getUserById = (id) =>
+  axiosClient.get(`/users/${id}`);
 
-/**
- * Cập nhật user
- */
-export const updateUser = (id, data) => {
-  return axios.put(`${API_BASE_URL}/users/${id}`, data);
-};
+export const createUser = (data) =>
+  axiosClient.post('/users', data);
 
-/**
- * Xoá user
- */
-export const deleteUser = (id) => {
-  return axios.delete(`${API_BASE_URL}/users/${id}`);
-};
+export const updateUser = (id, data) =>
+  axiosClient.put(`/users/${id}`, data);
+
+export const deleteUser = (id) =>
+  axiosClient.delete(`/users/${id}`);
+export const getRoles = () =>
+  axiosClient.get('/roles');

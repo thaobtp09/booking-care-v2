@@ -1,19 +1,12 @@
-require('dotenv').config();
 const app = require('./app');
-const sequelize = require('./config/database');
+const db = require('./models');
 
-const PORT = process.env.PORT;
+const PORT = 5000;
 
-(async () => {
-  try {
-    await sequelize.authenticate();
-    await sequelize.sync();
-    console.log('Doctor DB connected');
+db.sequelize.authenticate()
+  .then(() => console.log('DB connected'))
+  .catch(console.error);
 
-    app.listen(PORT, () =>
-      console.log(`Doctor Service running on port ${PORT}`)
-    );
-  } catch (err) {
-    console.error('DB connection failed', err);
-  }
-})();
+app.listen(PORT, () => {
+  console.log(`Doctor service running on port ${PORT}`);
+});

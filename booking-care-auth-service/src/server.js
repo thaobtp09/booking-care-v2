@@ -42,3 +42,6 @@ app.use('/permissions', permissionRoutes);
     process.exit(1);
   }
 })();
+const { startDoctorCreatedConsumer } = require('./rabbitmq/doctor.consumer');
+
+startDoctorCreatedConsumer();

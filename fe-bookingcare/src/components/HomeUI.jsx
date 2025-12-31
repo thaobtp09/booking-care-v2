@@ -36,9 +36,23 @@ const HomeUI = ({
           </div>
 
           <div className="home-nav">
-            {['Trang chủ', 'Chuyên khoa', 'Cơ sở y tế', 'Bác sĩ'].map(item => (
-              <button key={item}>{item}</button>
-            ))}
+           <div className="home-nav">
+  <button onClick={() => history.push('/')}>
+    Trang chủ
+  </button>
+
+  <button onClick={() => history.push('/specialties')}>
+    Chuyên khoa
+  </button>
+
+  <button onClick={() => history.push('/facilities')}>
+    Cơ sở y tế
+  </button>
+
+  <button onClick={() => history.push('/doctors')}>
+    Bác sĩ
+  </button>
+</div>
           </div>
 
           <div className="home-actions">

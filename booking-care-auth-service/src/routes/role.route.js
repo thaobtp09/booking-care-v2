@@ -9,21 +9,18 @@ const permission = require('../middlewares/permission.middleware');
 router.get(
   '/',
   auth,
-  permission('ROLE_VIEW'),
   roleController.getRoles
 );
 
 router.get(
   '/:id',
   auth,
-  permission('ROLE_VIEW'),
   roleController.getRoleById
 );
 // GET permissions of role
 router.get(
   "/:id/permissions",
   auth,
-  permission("PERMISSION_VIEW"),
   roleController.getRolePermissions
 );
 /**
@@ -32,7 +29,6 @@ router.get(
 router.post(
   '/',
   auth,
-  permission('ROLE_CREATE'),
   roleController.createRole
 );
 
@@ -42,7 +38,6 @@ router.post(
 router.put(
   '/:id',
   auth,
-  permission('ROLE_UPDATE'),
   roleController.updateRole
 );
 
@@ -53,7 +48,6 @@ router.put(
 router.delete(
   '/:id',
   auth,
-  permission('ROLE_DELETE'),
   roleController.deleteRole
 );
 

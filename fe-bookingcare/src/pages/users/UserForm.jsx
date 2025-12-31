@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   createUser,
+  getRoles,
   getUserById,
   updateUser
 } from "../../api/userApi";
@@ -9,28 +10,41 @@ const UserForm = ({ userId, onClose, onSuccess }) => {
   const [form, setForm] = useState({
     username: "",
     email: "",
-    role: ""
+    roleId: "",
+    password: "" // 🔥 thêm password
   });
 
+  const [roles, setRoles] = useState([]);
   const isEdit = Boolean(userId);
 
-  // Nếu là sửa → gọi API lấy thông tin user
   useEffect(() => {
-    if (!userId) return;
+    const fetchRoles = async () => {
+      try {
+        const res = await getRoles();
+        setRoles(res.data || []);
+      } catch {
+        alert("Không lấy được danh sách role");
+      }
+    };
 
     const fetchUser = async () => {
+      if (!userId) return;
+
       try {
         const res = await getUserById(userId);
-        setForm({
+        setForm(prev => ({
+          ...prev,
           username: res.data.username,
           email: res.data.email,
-          role: res.data.role
-        });
-      } catch (error) {
+          roleId: res.data?.role?.id || "",
+          password: "" // ❗ không fill password khi edit
+        }));
+      } catch {
         alert("Không lấy được thông tin user");
       }
     };
 
+    fetchRoles();
     fetchUser();
   }, [userId]);
 
@@ -44,15 +58,25 @@ const UserForm = ({ userId, onClose, onSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const payload = {
+      username: form.username,
+      email: form.email,
+      roleId: Number(form.roleId)
+    };
+
+    // 🔥 CHỈ gửi password khi có nhập
+    if (form.password) {
+      payload.password = form.password;
+    }
+
     try {
       if (isEdit) {
-        await updateUser(userId, form);
+        await updateUser(userId, payload);
       } else {
-        await createUser(form);
+        await createUser(payload);
       }
-
       onSuccess();
-    } catch (error) {
+    } catch {
       alert("Lưu user thất bại");
     }
   };
@@ -82,18 +106,34 @@ const UserForm = ({ userId, onClose, onSuccess }) => {
           />
         </div>
 
+        {/* 🔥 PASSWORD */}
+        <div>
+          <label>
+            Mật khẩu {isEdit && <i>(để trống nếu không đổi)</i>}
+          </label>
+          <input
+            type="password"
+            name="password"
+            value={form.password}
+            onChange={handleChange}
+            required={!isEdit} // tạo mới bắt buộc
+          />
+        </div>
+
         <div>
           <label>Role</label>
           <select
-            name="role"
-            value={form.role}
+            name="roleId"
+            value={form.roleId}
             onChange={handleChange}
             required
           >
             <option value="">-- Chọn role --</option>
-            <option value="ADMIN">ADMIN</option>
-            <option value="DOCTOR">DOCTOR</option>
-            <option value="PATIENT">PATIENT</option>
+            {roles.map(role => (
+              <option key={role.id} value={role.id}>
+                {role.name}
+              </option>
+            ))}
           </select>
         </div>
 

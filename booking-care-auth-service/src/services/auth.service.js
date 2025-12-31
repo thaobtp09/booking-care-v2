@@ -32,7 +32,8 @@ exports.login = async ({ email, password }) => {
   const token = generateToken({
     userId: user.id,
     role: user?.role?.name,
-    permissions
+    permissions,
+    doctor_id: user.doctor_id
   });
 
   // Trả về cho UI
@@ -42,7 +43,8 @@ exports.login = async ({ email, password }) => {
       id: user?.id,
       username: user?.username,
       role: user?.role?.name,
-      permissions
+      permissions,
+      doctor_id: user.doctor_id
     }
   };
 };

@@ -1,56 +1,58 @@
-import axios from "axios";
-
-const API_BASE_URL = process.env.REACT_APP_API_GATEWAY;
+import axiosClient from './axiosClient';
 
 /* ================= USER ================= */
 export const getUsers = () =>
-  axios.get(`${API_BASE_URL}/users`);
+  axiosClient.get('/users');
 
 export const getUserById = (id) =>
-  axios.get(`${API_BASE_URL}/users/${id}`);
+  axiosClient.get(`/users/${id}`);
 
 export const createUser = (data) =>
-  axios.post(`${API_BASE_URL}/users`, data);
+  axiosClient.post('/users', data);
 
 export const updateUser = (id, data) =>
-  axios.put(`${API_BASE_URL}/users/${id}`, data);
+  axiosClient.put(`/users/${id}`, data);
 
 export const deleteUser = (id) =>
-  axios.delete(`${API_BASE_URL}/users/${id}`);
+  axiosClient.delete(`/users/${id}`);
 
 /* ================= ROLE ================= */
 export const getRoles = () =>
-  axios.get(`${API_BASE_URL}/roles`);
+  axiosClient.get('/roles');
+
 export const getRoleById = (id) =>
-  axios.get(`${API_BASE_URL}/roles/${id}`);
+  axiosClient.get(`/roles/${id}`);
 
 export const createRole = (data) =>
-  axios.post(`${API_BASE_URL}/roles`, data);
+  axiosClient.post('/roles', data);
 
 export const updateRole = (id, data) =>
-  axios.put(`${API_BASE_URL}/roles/${id}`, data);
+  axiosClient.put(`/roles/${id}`, data);
 
 export const deleteRole = (id) =>
-  axios.delete(`${API_BASE_URL}/roles/${id}`);
+  axiosClient.delete(`/roles/${id}`);
 
 export const getRolePermissions = (roleId) =>
-  axios.get(`${API_BASE_URL}/roles/${roleId}/permissions`)
+  axiosClient.get(`/roles/${roleId}/permissions`);
 
 /* ================= PERMISSION ================= */
-export const getPermissions = () =>
-  axios.get(`${API_BASE_URL}/permissions`);
+//  Auth Service CHƯA có API GET /permissions → tạm thời comment
+// export const getPermissions = () =>
+//   axiosClient.get('/permissions');
 
-export const assignPermissionToRole = (data) =>
-  axios.put(`${API_BASE_URL}/role-permissions`, data);
+export const assignPermissionToRole = (roleId, data) =>
+  axiosClient.put(`/roles/${roleId}/permissions`, data);
+export const getPermissions = () =>
+  axiosClient.get('/permissions');
 
 /* ================= DOCTOR ================= */
 export const getDoctors = () =>
-  axios.get(`${API_BASE_URL}/doctors`);
+  axiosClient.get('/doctors');
 
 /* ================= FACILITY ================= */
 export const getFacilities = () =>
-  axios.get(`${API_BASE_URL}/facilities`);
+  axiosClient.get('/facilities');
 
 /* ================= SPECIALTY ================= */
 export const getSpecialties = () =>
-  axios.get(`${API_BASE_URL}/specialties`);
+  axiosClient.get('/specialties');

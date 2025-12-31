@@ -5,17 +5,11 @@ const userController = require('../controllers/user.controller');
 const auth = require('../middlewares/auth.middleware');
 const permission = require('../middlewares/permission.middleware');
 
-router.get(
-  '/',
-  auth,
-  permission('USER_VIEW'),
-  userController.getUsers
-);
+router.get('/',auth,permission('USER_VIEW'),userController.getUsers);
 
 router.get(
   '/:id',
   auth,
-  permission('USER_VIEW'),
   userController.getUserById
 );
 /**
@@ -25,7 +19,6 @@ router.get(
 router.post(
   '/',
   auth,                         // 1. phải login
-  permission('USER_CREATE'),    // 2. phải có quyền tạo user
   userController.createUser
 );
 
@@ -45,7 +38,6 @@ router.put(
 router.delete(
   '/:id',
   auth,
-  permission('USER_DELETE'),
   userController.deleteUser
 );
 

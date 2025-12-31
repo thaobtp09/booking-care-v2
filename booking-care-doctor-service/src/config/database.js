@@ -1,19 +1,10 @@
-const { Sequelize } = require('sequelize');
+require('dotenv').config();
 
-/**
- * Khởi tạo kết nối PostgreSQL
- * Dùng Sequelize giống auth-service
- */
-const sequelize = new Sequelize(
-  process.env.DB_NAME,     // tên DB
-  process.env.DB_USER,     // user
-  process.env.DB_PASSWORD,// password
-  {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    dialect: 'postgres',
-    logging: false
-  }
-);
-
-module.exports = sequelize;
+module.exports = {
+  database: process.env.DB_NAME || 'booking_care',
+  username: process.env.DB_USER || 'postgres',
+  password: process.env.DB_PASS || '123456',
+  host: process.env.DB_HOST || 'localhost',
+  port: 5432,
+  dialect: 'postgres'
+};

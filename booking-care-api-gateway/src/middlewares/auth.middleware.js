@@ -31,9 +31,9 @@ module.exports = (req, res, next) => {
     // Gắn thông tin user vào request header
     // Service phía sau KHÔNG cần verify JWT nữa
     req.headers['x-user-id'] = decoded.userId;
-    req.headers['x-user-role'] = decoded.role;
+    req.headers['x-user-role'] = decoded?.role;
     req.headers['x-user-permissions'] = JSON.stringify(decoded.permissions);
-    
+    req.headers['x-user-doctor-id'] = decoded.doctor_id ?? '';
     req.headers['x-gateway-secret'] = process.env.GATEWAY_SECRET;
 
 

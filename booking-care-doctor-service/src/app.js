@@ -1,12 +1,19 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 
+const facilityRoutes = require('./routes/facility.routes');
+const specialtyRoutes = require('./routes/specialty.routes');
+const doctorRoutes = require('./routes/doctor.routes');
+const timeSlotRoutes = require('./routes/timeSlot.routes');
+const doctorScheduleRoutes = require('./routes/doctorSchedule.routes');
+
+app.use(cors());
 app.use(express.json());
-
-// Routes
-app.use('/doctors', require('./routes/doctor.routes'));
-app.use('/specialties', require('./routes/specialty.routes'));
-app.use('/facilities', require('./routes/facility.routes'));
-app.use('/schedules', require('./routes/schedule.routes'));
+app.use('/facilities', facilityRoutes);
+app.use('/specialties', specialtyRoutes);
+app.use('/doctors', doctorRoutes);
+app.use('/time-slots', timeSlotRoutes);
+app.use('/doctor-schedules', doctorScheduleRoutes);
 
 module.exports = app;

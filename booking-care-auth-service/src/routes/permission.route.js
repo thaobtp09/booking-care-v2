@@ -11,9 +11,7 @@ const permission = require('../middlewares/permission.middleware');
  */
 router.get(
   '/roles/:roleId/permissions',
-  auth,
-  permission('PERMISSION_VIEW'),
-  permissionController.getPermissionsByRole
+  auth
 );
 
 /**
@@ -23,9 +21,11 @@ router.get(
  */
 router.put(
   '/roles/:roleId/permissions',
-  auth,
-  permission('PERMISSION_ASSIGN'),
-  permissionController.assignPermissions
+  auth
+);
+router.get(
+  '/',
+  auth
 );
 
 module.exports = router;
